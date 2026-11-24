@@ -1,0 +1,258 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Produtos Mais Vendidos | Gestão Comercial{% endblock %}
+
+{% block conteudo %}
+
+<!-- CABEÇALHO -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h3 class="fw-bold">
+            <i class="bi bi-cart-check text-primary"></i>
+            Produtos mais vendidos
+        </h3>
+
+        <p class="text-muted mb-0">
+            Ranking de produtos por quantidade comercializada.
+        </p>
+    </div>
+
+    <a href="{{ url_for('dashboard') }}"
+       class="btn btn-outline-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        Voltar ao dashboard
+
+    </a>
+
+</div>
+
+
+<!-- INDICADORES -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Produtos vendidos</h6>
+
+                    <h2>
+                        {{ dados|length }}
+                    </h2>
+                </div>
+
+                <i class="bi bi-box-seam fs-1 text-primary"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Unidades comercializadas</h6>
+
+                    <h2>
+                        {{ dados|sum(attribute='quantidade_vendida') }}
+                    </h2>
+                </div>
+
+                <i class="bi bi-cart-check fs-1 text-success"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Faturamento total</h6>
+
+                    <h2 class="fs-4">
+                        R$ {{ "%.2f"|format(
+                            dados|sum(attribute='faturamento')
+                        ) }}
+                    </h2>
+                </div>
+
+                <i class="bi bi-currency-dollar fs-1 text-warning"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TABELA DE PRODUTOS -->
+<div class="card">
+
+    <div class="card-header bg-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+                <i class="bi bi-bar-chart-line"></i>
+                Ranking de vendas
+            </h5>
+
+            <span class="badge bg-primary">
+                {{ dados|length }} produtos
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Produto</th>
+                        <th>Categoria</th>
+                        <th>Quantidade vendida</th>
+                        <th>Faturamento</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for produto in dados %}
+
+                    <tr>
+
+                        <td>
+
+                            {% if loop.index == 1 %}
+
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-trophy-fill"></i>
+                                    1º
+                                </span>
+
+                            {% elif loop.index == 2 %}
+
+                                <span class="badge bg-secondary">
+                                    2º
+                                </span>
+
+                            {% elif loop.index == 3 %}
+
+                                <span class="badge bg-danger">
+                                    3º
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-light text-dark">
+                                    {{ loop.index }}º
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td class="fw-bold">
+                            {{ produto.produto }}
+                        </td>
+
+
+                        <td>
+                            <span class="badge bg-info text-dark">
+                                {{ produto.categoria }}
+                            </span>
+                        </td>
+
+
+                        <td>
+
+                            <span class="fw-bold">
+                                {{ produto.quantidade_vendida }}
+                            </span>
+
+                            unidades
+
+                        </td>
+
+
+                        <td class="fw-bold text-success">
+
+                            R$ {{ "%.2f"|format(
+                                produto.faturamento
+                            ) }}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                    {% if not dados %}
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="text-center text-muted py-5">
+
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+
+                            Nenhum produto vendido encontrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- OBSERVAÇÃO -->
+<div class="alert alert-info mt-4">
+
+    <i class="bi bi-info-circle"></i>
+
+    Os produtos estão classificados pela quantidade total
+    comercializada, em ordem decrescente.
+
+</div>
+
+{% endblock %}

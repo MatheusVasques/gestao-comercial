@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+<h2>Relatório de vendas por período</h2>
+
+<form method="POST" class="card card-body mb-4">
+
+    <div class="row">
+
+        <div class="col-md-5">
+            <label>Data inicial</label>
+            <input type="date"
+                   name="data_inicio"
+                   class="form-control"
+                   value="{{ data_inicio }}"
+                   required>
+        </div>
+
+        <div class="col-md-5">
+            <label>Data final</label>
+            <input type="date"
+                   name="data_fim"
+                   class="form-control"
+                   value="{{ data_fim }}"
+                   required>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100">
+                Pesquisar
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+{% if dados %}
+
+<table class="table table-striped">
+
+    <thead class="table-dark">
+        <tr>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Faturamento</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in dados %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.cliente }}</td>
+            <td>{{ item.data_pedido }}</td>
+            <td>R$ {{ item.faturamento }}</td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endif %}
+
+{% endblock %}

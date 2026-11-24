@@ -1,0 +1,152 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Relatório de Categorias | Gestão Comercial{% endblock %}
+
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Relatório de Categorias</h2>
+            <p class="text-muted mb-0">
+                Desempenho de vendas agrupado por categoria.
+            </p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+            Voltar ao Dashboard
+        </a>
+    </div>
+
+    <!-- Indicadores -->
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Categorias com vendas</p>
+                    <h3 class="fw-bold text-primary">
+                        {{ dados|length }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Unidades vendidas</p>
+                    <h3 class="fw-bold text-success">
+                        {{ dados|sum(attribute='quantidade_vendida') }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Faturamento total</p>
+                    <h3 class="fw-bold text-dark">
+                        R$ {{ "%.2f"|format(dados|sum(attribute='faturamento')|float) }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tabela -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Desempenho por categoria</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if dados %}
+
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Categoria</th>
+                            <th>Quantidade vendida</th>
+                            <th>Faturamento</th>
+                            <th>Participação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% set faturamento_total = dados|sum(attribute='faturamento')|float %}
+
+                        {% for categoria in dados %}
+                        <tr>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ loop.index }}
+                                </span>
+                            </td>
+
+                            <td class="fw-semibold">
+                                {{ categoria.categoria }}
+                            </td>
+
+                            <td>
+                                {{ categoria.quantidade_vendida }}
+                            </td>
+
+                            <td class="fw-semibold text-success">
+                                R$ {{ "%.2f"|format(categoria.faturamento|float) }}
+                            </td>
+
+                            <td>
+                                {% set percentual = (categoria.faturamento|float / faturamento_total * 100) if faturamento_total > 0 else 0 %}
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="progress flex-grow-1" style="height: 8px;">
+                                        <div class="progress-bar bg-success"
+                                             role="progressbar"
+                                             style="width: {{ percentual }}%"
+                                             aria-valuenow="{{ percentual }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+
+                                    <small class="text-muted">
+                                        {{ "%.1f"|format(percentual) }}%
+                                    </small>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+
+            {% else %}
+
+            <div class="text-center py-5">
+                <h5 class="text-muted">Nenhuma categoria encontrada.</h5>
+                <p class="text-muted mb-0">
+                    Não existem categorias com vendas que atendam aos critérios do relatório.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

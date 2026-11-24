@@ -1,0 +1,128 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Dashboard | Gestão Comercial{% endblock %}
+
+{% block conteudo %}
+
+<div class="mb-4">
+
+    <h3 class="fw-bold">Dashboard</h3>
+
+    <p class="text-muted">
+        Indicadores gerais da gestão comercial.
+    </p>
+
+</div>
+
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Pedidos realizados</h6>
+                    <h2>{{ indicadores.total_pedidos }}</h2>
+                </div>
+
+                <i class="bi bi-cart-check fs-1 text-primary"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Clientes cadastrados</h6>
+                    <h2>{{ indicadores.total_clientes }}</h2>
+                </div>
+
+                <i class="bi bi-people fs-1 text-success"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Produtos cadastrados</h6>
+                    <h2>{{ indicadores.total_produtos }}</h2>
+                </div>
+
+                <i class="bi bi-box-seam fs-1 text-warning"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Faturamento total</h6>
+
+                    <h2>
+                        R$ {{ "%.2f"|format(indicadores.faturamento or 0) }}
+                    </h2>
+                </div>
+
+                <i class="bi bi-currency-dollar fs-1 text-success"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="card card-indicador">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h6>Ticket médio</h6>
+
+                    <h2>
+                        R$ {{ "%.2f"|format(indicadores.ticket_medio or 0) }}
+                    </h2>
+                </div>
+
+                <i class="bi bi-graph-up fs-1 text-primary"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

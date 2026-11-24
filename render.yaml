@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: gestao-comercial
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn flask_app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.5
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: gestao_comercial
+      - key: DB_SSL
+        value: "true"
+      - key: SECRET_KEY
+        generateValue: true

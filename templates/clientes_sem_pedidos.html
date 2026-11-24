@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Clientes sem Pedidos | Gestão Comercial{% endblock %}
+
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Clientes sem Pedidos</h2>
+            <p class="text-muted mb-0">
+                Clientes que ainda não realizaram nenhuma compra.
+            </p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+            Voltar ao Dashboard
+        </a>
+    </div>
+
+    <!-- Indicador -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Total de clientes sem pedidos</p>
+                    <h3 class="fw-bold text-danger">
+                        {{ dados|length }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Lista de clientes</h5>
+        </div>
+
+        <div class="card-body">
+
+            {% if dados %}
+
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Cidade</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for cliente in dados %}
+                        <tr>
+                            <td>{{ cliente.id }}</td>
+                            <td class="fw-semibold">{{ cliente.nome }}</td>
+                            <td>{{ cliente.email or '-' }}</td>
+                            <td>{{ cliente.cidade or '-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+            {% else %}
+
+            <div class="text-center py-5">
+                <h5 class="text-success">Todos os clientes já possuem pedidos!</h5>
+                <p class="text-muted mb-0">
+                    Não existem clientes sem pedidos cadastrados.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
